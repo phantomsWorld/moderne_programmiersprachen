@@ -1,4 +1,3 @@
-// Test github commit stkollos
 
 package view
 
