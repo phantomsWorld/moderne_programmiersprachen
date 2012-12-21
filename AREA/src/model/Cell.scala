@@ -13,12 +13,12 @@ case class Cell (height: Int, width: Int, color:Int) {
   def coordinatesToString = "(" + x + "," + y + ")"
   def toXML = <cell xValue={x.toString} yValue={y.toString}>{c}</cell>
   //<line>{x}<row>{y}<color>{c}</color></row></line>
-  override def toString = {color match {
-	case 0 => "r"
-	case 1 => "g"
-	case 2 => "y"
-	case 3 => "b"
-	case _ => "v"
-	}
+  override def toString = {
+  	val colors = Map( 0 -> "r",
+  					  1 -> "g",
+  					  2 -> "y",
+  					  3 -> "b",
+  					  4 -> "v" )
+	colors(color)
   }
 }

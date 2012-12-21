@@ -10,11 +10,9 @@ object TUI {
 		var controller:Fieldcontroller = new Fieldcontroller
 	    
 	    while (true) {
-	      println(controller.field.toString)
-	      println("Player on Turn: "+controller.playerOnTurn)
-	      println(controller.toString)
-	      println("Enter command: q-Quit  sw-Switch Player  'c *'-Change Color(*: new color)  r-Refresh Field \n" +
-	      		  "               'rs * *'-resize Field (width, height)  'save *'-Save (Filename)")
+	      println("Enter command: q-Quit  sw-Switch Player  'c *'-Change Color(*: new color)  r-Refresh field \n" +
+	      		  "               'new *'-New game('bot'/'server + port'/'client + ip + port') \n" +
+	      		  "				  'rs * *'-resize Field(width, height)  'load *'-Load(Filename)  'save *'-Save(Filename)")
 	      input = readLine()
 	      input match {
 	        case "q" => return
@@ -34,15 +32,25 @@ object TUI {
 	            case _ => {
 	              var commandInput = input.toString().split(" ")
 	              commandInput(0) match{
-	                case "rs" => controller = new Fieldcontroller(commandInput(1).toInt, commandInput(2).toInt)
+	                case "rs" => if(commandInput.size == 3) controller = new Fieldcontroller(commandInput(1).toInt, commandInput(2).toInt) else println("Incorrect count of parameters!")
 	                case "save" => controller.saveXML(commandInput(1))
 	                case "load" => {
-	                  if(commandInput(1).contains(".xml")){
+	                  if(commandInput.size != 2) println("Incorrect count of parameters!")
+	                  else if(commandInput(1).contains(".xml")){
 	                    val data = scala.xml.XML.loadFile(commandInput(1))
-	                    controller = new Fieldcontroller((data \\ "player").text.toInt, (data \\ "height").text.toInt, (data \\ "width").text.toInt)
+	                    controller = new Fieldcontroller((data \\ "player").text.toInt, (data \\ "height").text.toInt, (data \\ "width").text.toInt,true)
 	                    controller.parseXML(data)
 	                  }
 	                  else println("Incorrect Filename")
+	                }
+	                case "new" => {
+	                  if(commandInput.size != 2) println("Incorrect count of parameters!")
+	                  else
+		                  commandInput(1) match {
+		                    case "bot" => controller = new Fieldcontroller(true)
+		                    /*case "server" => 
+		                    case "client" => */
+		                  }
 	                }
 	                case _ => println("Invalid command. Please enter a correct one!")
 	              }
@@ -50,6 +58,8 @@ object TUI {
 	          }
 	        }
 	      }
+	      
+	      println(controller.toString)
 	    }
 	}
 }

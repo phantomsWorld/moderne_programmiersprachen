@@ -1,6 +1,6 @@
 package model
 
-class Neighbors(){
+class Neighbors{
   var list:List[Cell] = Nil
   
   override def toString = {
