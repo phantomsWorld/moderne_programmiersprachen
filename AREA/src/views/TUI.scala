@@ -1,6 +1,6 @@
-package view
+package views
 
-import controller._
+import controllers._
 
 object TUI {
 	def main(args:Array[String]) {
