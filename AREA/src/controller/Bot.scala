@@ -3,26 +3,17 @@ package controller
 import model._
 
 class Bot (fieldController:Fieldcontroller,botID:Int) {
-	val maxRecDepth = 1
-	var sizeRecArray = 0
-	val recStartArray = Array.tabulate(maxRecDepth)(x => 0)
-	for(i<- 0 until maxRecDepth) {
-	  recStartArray(i) = sizeRecArray
-	  sizeRecArray = sizeRecArray + (math.pow(fieldController.colorNum,i+1)).toInt
-	}
-	val recursionNeighbors = Array.tabulate(sizeRecArray)(x => new Neighbors)
-
-	def getBotColor():Int = {
-	  updateRecursionNeighbors
+	val defaultRecDepth = 4
+	var recursionHandle = new RecursionHandler(fieldController,defaultRecDepth,botID)
+	val countOfPossibleNeighbors = Array.tabulate(fieldController.colorNum) (i => 0)
+	
+	def getBotColor():Int = getBotColor(defaultRecDepth)
+	def getBotColor(recDepth:Int):Int = {
+	  recursionHandle.updateRecursionNeighbors
 	  
 	  var botColor = 0
 	  
-	  val countOfPossibleNeighbors = Array.tabulate(fieldController.colorNum) (i => 0)
-	  
-	  for(i<-recStartArray(maxRecDepth-1) until recStartArray(maxRecDepth-1)+(if(maxRecDepth==1) fieldController.colorNum else (math.pow(fieldController.colorNum, maxRecDepth).toInt)-1)) {
-	    val possibleNeighbor = if(maxRecDepth == 1) i else (i/(math.pow(fieldController.colorNum,(maxRecDepth-1)))).toInt-1
-	    countOfPossibleNeighbors(possibleNeighbor) = math.max(countOfPossibleNeighbors(possibleNeighbor), recursionNeighbors(i).list.size)
-	  }
+	  calculateNeighborCounts(recDepth)
 	  
 	  countOfPossibleNeighbors(fieldController.field.playerStart(0).c) = -1
 	  countOfPossibleNeighbors(fieldController.field.playerStart(1).c) = -1
@@ -33,11 +24,23 @@ class Bot (fieldController:Fieldcontroller,botID:Int) {
 	  return botColor
 	}
 	
-	def updateRecursionNeighbors {
-	  for(recNum<-0 until maxRecDepth; actualColor<- 0 until (math.pow(fieldController.colorNum,(recNum+1))).toInt) {
-	    if(recNum == 0) recursionNeighbors(actualColor).list = fieldController.recursiveBotNeighbors(fieldController.ownedCells(botID).list, actualColor)
-	    else recursionNeighbors(recStartArray(recNum)+actualColor).list = fieldController.recursiveBotNeighbors(recursionNeighbors(recStartArray(recNum-1)+actualColor/fieldController.colorNum).list, actualColor % fieldController.colorNum)
+	def calculateNeighborCounts(recDepth:Int):Boolean = {
+	  for(i<- 0 until math.pow(fieldController.colorNum, recDepth).toInt) {
+	    //val possibleNeighbor = /*if(recDepth == 1) i else */(i/(math.pow(fieldController.colorNum,(recDepth-1)))).toInt
+	    //countOfPossibleNeighbors(possibleNeighbor) = math.max(countOfPossibleNeighbors(possibleNeighbor), recursionHandle.recursionNeighbors(recursionHandle.recStartArray(recDepth-1)+i).list.size)
+	    countOfPossibleNeighbors((i/(math.pow(fieldController.colorNum,(recDepth-1)))).toInt) = math.max(countOfPossibleNeighbors((i/(math.pow(fieldController.colorNum,(recDepth-1)))).toInt), recursionHandle.recursionNeighbors(recursionHandle.recStartArray(recDepth-1)+i).list.size)
 	  }
+	  
+	  // compare if all elements have the same value
+	  if(recDepth > 1 && countOfPossibleNeighbors.sameElements(Array.tabulate(fieldController.colorNum) (i=>countOfPossibleNeighbors(0)))) {
+	    for(i<-0 until fieldController.colorNum) countOfPossibleNeighbors(i) = 0
+	    
+	    calculateNeighborCounts(recDepth-1)
+	  }
+	  else true
 	}
+	
+	def recursion = recursionHandle.recursionDepth
+	def recursion(newValue:Int) = recursionHandle = new RecursionHandler(fieldController,newValue,botID)
 	 
 }

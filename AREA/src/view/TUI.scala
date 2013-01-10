@@ -1,4 +1,3 @@
-
 package view
 
 import controller._
@@ -60,6 +59,8 @@ object TUI {
 	      }
 	      
 	      println(controller.toString)
+	      
+	      //println("\n"+controller.fieldToHtmlString)
 	    }
 	}
 }
