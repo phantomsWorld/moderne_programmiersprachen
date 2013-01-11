@@ -152,7 +152,7 @@ class Fieldcontroller (playerCount: Int, height: Int, width: Int, useBot:Boolean
 	def fieldToHtmlString = {
 	  var result = ""
 	  
-	  for(i<-0 until height; j<-0 until width) result = result+(if(j==0)"<tr>"else"")+"<td id='"+i+"-"+j+"' class='"+field.cells(i)(j).toString+"'><img src='"+field.cells(i)(j).toString+".png' alt='"+field.cells(i)(j).toString+"' class='"+(if(ownedCells(0).list.contains(field.cells(i)(j))==true) "glow0" else if(ownedCells(1).list.contains(field.cells(i)(j))==true) "glow1" else "")+"' /></td>"+(if(j==width-1)"</tr>"else"")
+	  for(i<-0 until height; j<-0 until width) result = result+(if(j==0)"<tr>"else"")+"<td id='"+i+"-"+j+"' class='"+field.cells(i)(j).toString+"'><a href='#' class='changeColorField'><img src='"+field.cells(i)(j).toString+".png' alt='"+field.cells(i)(j).toString+"' class='"+(if(ownedCells(0).list.contains(field.cells(i)(j))==true) "glow0" else if(ownedCells(1).list.contains(field.cells(i)(j))==true) "glow1" else "")+"' /></a></td>"+(if(j==width-1)"</tr>"else"")
 	  
 	  result + ""
 	}

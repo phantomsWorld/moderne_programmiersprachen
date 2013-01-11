@@ -1,6 +1,7 @@
 package views
 
 import controllers._
+import model.Util
 
 object TUI {
 	def main(args:Array[String]) {
@@ -20,14 +21,9 @@ object TUI {
 	        case _ => {
 	          input.toList.filter(c => c != ' ').map(c => c.toString) match{
 	            case "c" :: color :: Nil => color match {
-	              case "b" => controller.changeColor(3)
-	              case "g" => controller.changeColor(1)
-	              case "r" => controller.changeColor(0)
-	              case "v" => controller.changeColor(4)
-	              case "y" => controller.changeColor(2)
+	              case "b" | "g" | "r" | "v" | "y" => controller.changeColor((new Util).color(color).asInstanceOf[Int])
 	              case _   => println("Invalid color. Please enter a correct one!")
 	            }
-	            //case "rs" :: width :: height :: Nil => println("test")
 	            case _ => {
 	              var commandInput = input.toString().split(" ")
 	              commandInput(0) match{
@@ -35,11 +31,7 @@ object TUI {
 	                case "save" => controller.saveXML(commandInput(1))
 	                case "load" => {
 	                  if(commandInput.size != 2) println("Incorrect count of parameters!")
-	                  else if(commandInput(1).contains(".xml")){
-	                    val data = scala.xml.XML.loadFile(commandInput(1))
-	                    controller = new Fieldcontroller((data \\ "player").text.toInt, (data \\ "height").text.toInt, (data \\ "width").text.toInt,true)
-	                    controller.parseXML(data)
-	                  }
+	                  else if(commandInput(1).contains(".xml")) (new Util).loadGame(commandInput(1))
 	                  else println("Incorrect Filename")
 	                }
 	                case "new" => {
@@ -59,8 +51,6 @@ object TUI {
 	      }
 	      
 	      println(controller.toString)
-	      
-	      //println("\n"+controller.fieldToHtmlString)
 	    }
 	}
 }
