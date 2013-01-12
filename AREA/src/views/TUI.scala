@@ -2,9 +2,13 @@ package views
 
 import controllers._
 import model.Util
+import swingGuiTest.AreaFrame
 
 object TUI {
 	def main(args:Array[String]) {
+	  val gui = new AreaFrame()
+	  gui.open()
+	  
 		var input = ""
 		var color = ""
 		var controller:Fieldcontroller = new Fieldcontroller

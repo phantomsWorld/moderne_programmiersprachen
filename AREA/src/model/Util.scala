@@ -1,6 +1,7 @@
 package model
 import java.io.File
 import controllers.Fieldcontroller
+import java.awt.Color
 
 class Util {
 	// define mapper for color from String to Int
@@ -15,11 +16,19 @@ class Util {
 			  					  2 -> "y",
 			  					  3 -> "b",
 			  					  4 -> "v" )
+	val colorIntToSwingColor = Map(	0 -> Color.RED,
+									1 -> Color.GREEN,
+									2 -> Color.YELLOW,
+									3 -> Color.BLUE,
+									4 -> Color.MAGENTA )
 	
 	// convert color by pattern matching
-	def color(value:Any) = value match {
+	def color(value:Any,swing:Boolean=false) = value match {
 	  case c:String => colorsStringToInt(c)
-	  case c:Int 	=> colorsIntToString(c)
+	  case c:Int 	=> swing match{
+	    case false 	=> colorsIntToString(c)
+	    case _		=> colorIntToSwingColor(c)
+	  }
 	  case _ => 0
 	}
 	

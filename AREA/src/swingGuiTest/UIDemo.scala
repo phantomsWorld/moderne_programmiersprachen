@@ -1,3 +1,4 @@
+package swingGuiTest;
 
 import swing._
 import event._

@@ -5,7 +5,7 @@ import model._
 class Fieldcontroller (playerCount: Int, height: Int, width: Int, useBot:Boolean){
 	def this(){this(2,8,8,true)}
 	def this(height:Int, width:Int){this(2,height,width,true)}
-	def this(useBot:Boolean){this(2,4,4,useBot)}
+	def this(useBot:Boolean){this(2,8,8,useBot)}
 	
 	println("==== Define new Fieldcontroller ====")
 	
@@ -94,6 +94,7 @@ class Fieldcontroller (playerCount: Int, height: Int, width: Int, useBot:Boolean
 	}
 	
 	def refreshField = {
+	  println("=== Refresh field ===")
 	  field.generateRandom
 	  updateOwnedCells(0)
 	  updateOwnedCells(1)
@@ -110,6 +111,7 @@ class Fieldcontroller (playerCount: Int, height: Int, width: Int, useBot:Boolean
 	}
 	
 	def changeColor(newColor:Int) = {
+	  println("Color changed to: "+(new Util).color(newColor))
 	  val player = playerOnTurn
 	  if(useBot) changeColorWithBotInformation(newColor,true) else changeColorWithBotInformation(newColor,false)
 	  

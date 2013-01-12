@@ -1,11 +1,13 @@
 package swingGuiTest;
-	import java.awt.Color;
-	import java.awt.Dimension;
-	import java.awt.Graphics;
-	import javax.swing.JComponent;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import javax.swing.JComponent;
 	
 public class Bar extends JComponent{
 
+	private static final long serialVersionUID = 1L;
 	private int val;
 
 	public Bar(int value){
