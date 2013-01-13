@@ -26,7 +26,6 @@ object Util {
 	
 	// Event-class
 	case object FieldUpdate extends Event
-	case object NewGame extends Event
 	case object ClosePopup extends Event
 	
 	// convert color by pattern matching

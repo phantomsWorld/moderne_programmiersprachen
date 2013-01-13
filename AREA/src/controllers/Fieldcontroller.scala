@@ -88,11 +88,10 @@ class Fieldcontroller (playerCount: Int, height: Int, width: Int, useBot:Boolean
 	  if(neighborFound == true) list = recursiveBotNeighbors(list, nextCheckingColor)
 	  
 	  return list
-	  
 	}
 	
 	def refreshField = {
-	  println("=== Refresh field ===")
+	  //println("=== Refresh field ===")
 	  field.generateRandom
 	  updateOwnedCells(0)
 	  updateOwnedCells(1)
@@ -101,15 +100,11 @@ class Fieldcontroller (playerCount: Int, height: Int, width: Int, useBot:Boolean
 	def switchPlayer = playerOnTurn = (playerOnTurn+1)%2
 	
 	def waitForBot:Boolean = {
-	  if(useBot){
-	    var color = bot.getBotColor
-	    println("Selected color: "+color)
-	    changeColorWithBotInformation(color,false)}
+	  if(useBot) changeColorWithBotInformation(bot.getBotColor,false)
 	  true
 	}
 	
 	def changeColor(newColor:Int) = {
-	  println("Color changed to: "+Util.color(newColor))
 	  val player = playerOnTurn
 	  if(useBot) changeColorWithBotInformation(newColor,true) else changeColorWithBotInformation(newColor,false)
 	  

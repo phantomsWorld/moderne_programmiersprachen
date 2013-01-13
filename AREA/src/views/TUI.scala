@@ -1,15 +1,15 @@
 package views
 
-import controllers.GameController
+import controllers._
 import model.Util
-import scala.swing.SimpleSwingApplication
-import scala.swing._
 
 // Dialog because of the event-Listener
-class TUI(controller:GameController) extends Dialog {
-	listenTo(controller)
+class TUI(controller:GameController) {
   
-	val ioThread = new Thread(new Runnable {
+	val outputThread = new TuiThread(controller)
+	new Thread(outputThread).start
+  
+	new Thread(new Runnable {
 	  var input = ""
 	  
 	  def run() {
@@ -28,6 +28,8 @@ class TUI(controller:GameController) extends Dialog {
 	            case _ => {
 	              var commandInput = input.toString().split(" ")
 	              commandInput(0) match{
+	              	case "gameList" => controller.availableFiles("games/","Text").split(";").foreach(fileName => println(fileName+"\n"))
+	              	case "rec" => if(commandInput.size > 2 || commandInput(1).toInt > 6 || commandInput(1).toInt < 1) println("Incorrect input. Check structure or recursion depth.") else controller.resetBotRecursion(commandInput(1).toInt)
 	                case "rs" => if(commandInput.size == 3) controller.resizeField(commandInput(1).toInt, commandInput(2).toInt) else println("Incorrect count of parameters!")
 	                case "save" => controller.saveGame(commandInput(1))
 	                case "load" => {
@@ -43,29 +45,5 @@ class TUI(controller:GameController) extends Dialog {
 	      }
 	    }
 	  }
-	})
-	
-	val newGameInput = "Bitte bestätigen Sie dies mit dem Start eines neuen Spiels mit 'n'"
-	def listGame = {
-	  println(controller.toString("Text"))
-	      
-	  println("Enter command: q-Quit  'c *'-Change Color(*: new color)\n" +
-	   		  "               'n'-New game  'rs * *'-resize Field(width, height)\n" +
-	   		  "				  'load *'-Load(Filename)  'save *'-Save(Filename)\n" + 
-	   		  "               'files'-List Games")
-	  
-	  if(controller.readPossessions(0)>50.0) println("Gratulation! Sie haben gewonnen!\n\n"+newGameInput)
-	  if(controller.readPossessions(1)>50.0) println("Schade, Sie haben leider verloren."+newGameInput)
-	  if(controller.readPossessions(0) == 50.0 && controller.readPossessions(1) == 50.0) println("Unentschieden! Versuchen Sie es doch nochmal."+newGameInput)
-	}
-	
-	listGame
-	ioThread.run
-	
-	reactions += {
-	  case Util.FieldUpdate => {
-	    println("Event erhalten")
-	    listGame
-	  }
-    }
+	}).run
 }
