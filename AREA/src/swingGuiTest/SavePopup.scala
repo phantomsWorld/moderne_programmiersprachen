@@ -2,9 +2,9 @@ package swingGuiTest
 
 import scala.swing._
 import javax.swing.UIManager
-import controllers.Fieldcontroller
+import controllers._
 
-class SavePopup(controller:Fieldcontroller,fileRootDir:String) extends Dialog {
+class SavePopup(controller:GameController,fileRootDir:String) extends Dialog {
   title = "Speichern des aktuellen Spiels"
   modal = true
   preferredSize = new Dimension(350,260)
@@ -41,7 +41,7 @@ class SavePopup(controller:Fieldcontroller,fileRootDir:String) extends Dialog {
     contents += new FlowPanel {
       contents += Button("Ok"){
         println("Selected file: "+fileName.text)
-        controller.saveXML(fileRootDir+fileName.text)
+        controller.saveGame(fileRootDir+fileName.text)
         close
       }
       contents += Button("Abbrechen"){
@@ -49,4 +49,6 @@ class SavePopup(controller:Fieldcontroller,fileRootDir:String) extends Dialog {
       }
     }
   }
+  
+  open
 }

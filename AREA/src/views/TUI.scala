@@ -1,51 +1,39 @@
 package views
 
-import controllers._
+import controllers.GameController
 import model.Util
-import swingGuiTest.AreaFrame
+import scala.swing.SimpleSwingApplication
+import scala.swing._
 
-object TUI {
-	def main(args:Array[String]) {
-	  val gui = new AreaFrame()
-	  gui.open()
+// Dialog because of the event-Listener
+class TUI(controller:GameController) extends Dialog {
+	listenTo(controller)
+  
+	val ioThread = new Thread(new Runnable {
+	  var input = ""
 	  
-		var input = ""
-		var color = ""
-		var controller:Fieldcontroller = new Fieldcontroller
-	    
+	  def run() {
 	    while (true) {
-	      println("Enter command: q-Quit  sw-Switch Player  'c *'-Change Color(*: new color)  r-Refresh field \n" +
-	      		  "               'new *'-New game('bot'/'server + port'/'client + ip + port') \n" +
-	      		  "				  'rs * *'-resize Field(width, height)  'load *'-Load(Filename)  'save *'-Save(Filename)")
+	      
 	      input = readLine()
 	      input match {
 	        case "q" => return
-	        case "r" => controller.refreshField
-	        case "sw" => controller.switchPlayer
+	        case "n" => controller.refreshField
 	        case _ => {
 	          input.toList.filter(c => c != ' ').map(c => c.toString) match{
 	            case "c" :: color :: Nil => color match {
-	              case "b" | "g" | "r" | "v" | "y" => controller.changeColor((new Util).color(color).asInstanceOf[Int])
+	              case "b" | "g" | "r" | "v" | "y" => controller.changeColor(color)
 	              case _   => println("Invalid color. Please enter a correct one!")
 	            }
 	            case _ => {
 	              var commandInput = input.toString().split(" ")
 	              commandInput(0) match{
-	                case "rs" => if(commandInput.size == 3) controller = new Fieldcontroller(commandInput(1).toInt, commandInput(2).toInt) else println("Incorrect count of parameters!")
-	                case "save" => controller.saveXML(commandInput(1))
+	                case "rs" => if(commandInput.size == 3) controller.resizeField(commandInput(1).toInt, commandInput(2).toInt) else println("Incorrect count of parameters!")
+	                case "save" => controller.saveGame(commandInput(1))
 	                case "load" => {
 	                  if(commandInput.size != 2) println("Incorrect count of parameters!")
-	                  else if(commandInput(1).contains(".xml")) (new Util).loadGame(commandInput(1))
+	                  else if(commandInput(1).contains(".xml")) controller.loadGame(commandInput(1))
 	                  else println("Incorrect Filename")
-	                }
-	                case "new" => {
-	                  if(commandInput.size != 2) println("Incorrect count of parameters!")
-	                  else
-		                  commandInput(1) match {
-		                    case "bot" => controller = new Fieldcontroller(true)
-		                    /*case "server" => 
-		                    case "client" => */
-		                  }
 	                }
 	                case _ => println("Invalid command. Please enter a correct one!")
 	              }
@@ -53,8 +41,31 @@ object TUI {
 	          }
 	        }
 	      }
-	      
-	      println(controller.toString)
 	    }
+	  }
+	})
+	
+	val newGameInput = "Bitte bestätigen Sie dies mit dem Start eines neuen Spiels mit 'n'"
+	def listGame = {
+	  println(controller.toString("Text"))
+	      
+	  println("Enter command: q-Quit  'c *'-Change Color(*: new color)\n" +
+	   		  "               'n'-New game  'rs * *'-resize Field(width, height)\n" +
+	   		  "				  'load *'-Load(Filename)  'save *'-Save(Filename)\n" + 
+	   		  "               'files'-List Games")
+	  
+	  if(controller.readPossessions(0)>50.0) println("Gratulation! Sie haben gewonnen!\n\n"+newGameInput)
+	  if(controller.readPossessions(1)>50.0) println("Schade, Sie haben leider verloren."+newGameInput)
+	  if(controller.readPossessions(0) == 50.0 && controller.readPossessions(1) == 50.0) println("Unentschieden! Versuchen Sie es doch nochmal."+newGameInput)
 	}
+	
+	listGame
+	ioThread.run
+	
+	reactions += {
+	  case Util.FieldUpdate => {
+	    println("Event erhalten")
+	    listGame
+	  }
+    }
 }

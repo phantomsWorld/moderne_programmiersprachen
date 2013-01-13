@@ -7,8 +7,6 @@ class Fieldcontroller (playerCount: Int, height: Int, width: Int, useBot:Boolean
 	def this(height:Int, width:Int){this(2,height,width,true)}
 	def this(useBot:Boolean){this(2,8,8,useBot)}
 	
-	println("==== Define new Fieldcontroller ====")
-	
 	val colorNum = 5
 	val field = new Field(playerCount, height, width)
 	val ownedCells = Array(new Neighbors,new Neighbors)
@@ -111,7 +109,7 @@ class Fieldcontroller (playerCount: Int, height: Int, width: Int, useBot:Boolean
 	}
 	
 	def changeColor(newColor:Int) = {
-	  println("Color changed to: "+(new Util).color(newColor))
+	  println("Color changed to: "+Util.color(newColor))
 	  val player = playerOnTurn
 	  if(useBot) changeColorWithBotInformation(newColor,true) else changeColorWithBotInformation(newColor,false)
 	  

@@ -13,5 +13,5 @@ case class Cell (height: Int, width: Int, color:Int) {
   def coordinatesToString = "(" + x + "," + y + ")"
   def toXML = <cell xValue={x.toString} yValue={y.toString}>{c}</cell>
   
-  override def toString = (new Util).colorsIntToString(color)
+  override def toString = Util.colorsIntToString(color)
 }

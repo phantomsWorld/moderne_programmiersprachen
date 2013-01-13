@@ -18,7 +18,7 @@ class Bot (fieldController:Fieldcontroller,botID:Int) {
 	  countOfPossibleNeighbors(fieldController.field.playerStart(0).c) = -1
 	  countOfPossibleNeighbors(fieldController.field.playerStart(1).c) = -1
 	  
-	  for(i<-0 until fieldController.colorNum) println("Color: "+i+" - Size: "+countOfPossibleNeighbors(i))
+	  //for(i<-0 until fieldController.colorNum) println("Color: "+i+" - Size: "+countOfPossibleNeighbors(i))
 	  for(i<-0 until fieldController.colorNum) if(countOfPossibleNeighbors(i) > countOfPossibleNeighbors(botColor)) botColor = i
 	  
 	  return botColor

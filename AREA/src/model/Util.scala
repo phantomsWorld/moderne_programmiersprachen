@@ -2,8 +2,10 @@ package model
 import java.io.File
 import controllers.Fieldcontroller
 import java.awt.Color
+import java.net.Socket
+import scala.swing.event.Event
 
-class Util {
+object Util {
 	// define mapper for color from String to Int
 	val colorsStringToInt = Map(  "r" -> 0,
 			  					  "g" -> 1,
@@ -21,6 +23,11 @@ class Util {
 									2 -> Color.YELLOW,
 									3 -> Color.BLUE,
 									4 -> Color.MAGENTA )
+	
+	// Event-class
+	case object FieldUpdate extends Event
+	case object NewGame extends Event
+	case object ClosePopup extends Event
 	
 	// convert color by pattern matching
 	def color(value:Any,swing:Boolean=false) = value match {
@@ -59,5 +66,15 @@ class Util {
 	    val result = new Fieldcontroller((data \\ "player").text.toInt, (data \\ "height").text.toInt, (data \\ "width").text.toInt,true)
 	    result.parseXML(data)
 	    result
+	}
+	
+	def openPort(port:Int=9001):Int = {
+	  try {
+	    val socket = new Socket("localhost",port)
+	    socket.close()
+	    openPort(port+1)
+	  } catch {
+	    case e:Exception => port
+	  }
 	}
 }

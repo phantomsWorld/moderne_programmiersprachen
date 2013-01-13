@@ -1,10 +1,11 @@
 package swingGuiTest
 
+import controllers.GameController
 import scala.swing._
 import javax.swing.UIManager
-import controllers.Fieldcontroller
 
-class ResizePopup(actualWidth:Int,actualHeight:Int) extends Dialog {
+class ResizePopup(actualWidth:Int,actualHeight:Int,controller:GameController) extends Dialog {
+  
   title = "Anpassung der Spielfelgröße"
   modal = true
   preferredSize = new Dimension(350,350)
@@ -63,8 +64,8 @@ class ResizePopup(actualWidth:Int,actualHeight:Int) extends Dialog {
   def buttonPanel = new BoxPanel(Orientation.Vertical) {
     contents += new FlowPanel {
       contents += Button("Ok"){
-        println("Breite: "+sliderWidth.value)
-        println("Höhe: "+sliderHeight.value)
+        //publish((new Message(sliderWidth.value.toString+";"+sliderHeight.value.toString)).m)
+        controller.resizeField(sliderHeight.value,sliderWidth.value)
         close
       }
       contents += Button("Abbrechen"){
@@ -72,4 +73,6 @@ class ResizePopup(actualWidth:Int,actualHeight:Int) extends Dialog {
       }
     }
   }
+  
+  open
 }

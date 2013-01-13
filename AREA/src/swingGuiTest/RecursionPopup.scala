@@ -1,10 +1,11 @@
 package swingGuiTest
 
+import controllers.GameController
 import scala.swing._
 import javax.swing.UIManager
-import controllers.Fieldcontroller
 
-class RecursionPopup(actualRecursion:Int) extends Dialog {
+class RecursionPopup(actualRecursion:Int,controller:GameController) extends Dialog {
+  
   title = "Rekursionstiefe für Bot festlegen"
   modal = true
   preferredSize = new Dimension(350,180)
@@ -38,7 +39,6 @@ class RecursionPopup(actualRecursion:Int) extends Dialog {
   
   def addRecursion = new BoxPanel (Orientation.Vertical) {
     border = Swing.EmptyBorder(15)
-    //contents += new MigPanel{add(new Label("Rekursionstiefe") { border = Swing.EmptyBorder(0,0,5,0) })}
     contents += slider
   }
   
@@ -46,7 +46,7 @@ class RecursionPopup(actualRecursion:Int) extends Dialog {
   def buttonPanel = new BoxPanel(Orientation.Vertical) {
     contents += new FlowPanel {
       contents += Button("Ok"){
-        println("Rekursionstiefe: "+slider.value)
+        controller.resetBotRecursion(slider.value)
         close
       }
       contents += Button("Abbrechen"){
@@ -54,4 +54,6 @@ class RecursionPopup(actualRecursion:Int) extends Dialog {
       }
     }
   }
+  
+  open
 }

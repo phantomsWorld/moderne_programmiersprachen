@@ -1,9 +1,12 @@
 package swingGuiTest
 
+import controllers.GameController
+
 import scala.swing._
 import javax.swing.UIManager
 
-class LoadPopup(files:String) extends Dialog {
+class LoadPopup(rootDir:String,files:String,controller:GameController) extends Dialog {
+  
   title = "Laden eines gespeicherten Spiels"
   modal = true
   preferredSize = new Dimension(350,350)
@@ -34,7 +37,11 @@ class LoadPopup(files:String) extends Dialog {
   def buttonPanel = new BoxPanel(Orientation.Vertical) {
     contents += new FlowPanel {
       contents += Button("Ok"){
-        if(fileTable.selection.rows.leadIndex >= 0) println("Selected file: "+(files.split("\n"))(fileTable.selection.rows.leadIndex))
+        if(fileTable.selection.rows.leadIndex >= 0) {
+          //println("Selected file: "+(files.split("\n"))(fileTable.selection.rows.leadIndex))
+          controller.loadGame(rootDir+(files.split("\n"))(fileTable.selection.rows.leadIndex))
+          //publish((new Message((files.split("\n"))(fileTable.selection.rows.leadIndex))).m)
+        }
         close
       }
       contents += Button("Abbrechen"){
@@ -42,4 +49,6 @@ class LoadPopup(files:String) extends Dialog {
       }
     }
   }
+  
+  open
 }

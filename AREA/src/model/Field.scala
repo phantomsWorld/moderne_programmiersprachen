@@ -16,7 +16,7 @@ class Field ( player: Int, height: Int, width: Int ) {
 	    cells(i)(j) = new Cell(i,j,randomColor)
   	}
   
-  def playerStart(player:Int):Cell = if(player == 1) cells(height-1)(0) else cells(0)(width-1)
+  def playerStart(player:Int):Cell = if(player == 0) cells(0)(0) else cells(height-1)(width-1)
   
   def toXML:xml.Elem = {
     val temp:Seq[xml.Elem] = for(i<-0 until height; j<-0 until width) yield cells(i)(j).toXML
@@ -25,8 +25,11 @@ class Field ( player: Int, height: Int, width: Int ) {
   
   override def toString = {
     var result = ""
-    //cells.foreach(line => result += line.foreach(cell => result += cell.toString).toString + "\n")
-    for(i <-0 until height;j<-0 until width) result += cells(i)(j).toString + (if(j == width-1) "\n" else " ")
+    //for(i <-0 until height;j<-0 until width) result += cells(i)(j).toString + (if(j == width-1) "\n" else " ")
+    cells.foreach(row => {
+      row.foreach(cell => result += cell.toString+" ")
+      result += "\n"
+    })
     
     result+""
   }
