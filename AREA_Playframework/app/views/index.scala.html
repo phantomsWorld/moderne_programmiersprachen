@@ -1,0 +1,18 @@
+@(message: String)
+
+@main(message) {
+	<div id="imageRoute" class='@routes.Assets.at("images/")'></div>
+	<table id="buttonTable" class='ui-corner-all'>
+		<tr>
+			<td><input type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only changeColorButton" id="b" value="Blau" /></td>
+			<td><input type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only changeColorButton" id="y" value="Gelb" /></td>
+			<td><input type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only changeColorButton" id="g" value="Gr&uuml;n" /></td>
+			<td><input type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only changeColorButton" id="v" value="Lila" /></td>
+			<td><input type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only changeColorButton" id="r" value="Rot" /></td>
+		</tr>
+	</table>
+	<table id='field' class='ui-corner-all'>
+		
+	</table>
+	<div id="formContent"></div>
+}

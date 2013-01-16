@@ -1,0 +1,23 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index
+
+GET		/changeColorButton			controllers.Application.changeColorButton(newColor:String)
+GET		/refreshFieldHtml			controllers.Application.refreshFieldHtml
+GET		/refreshField				controllers.Application.refreshField
+GET		/botRecursion				controllers.Application.botRecursion
+GET		/resetBotRecursion			controllers.Application.resetBotRecursion(value:Int)
+GET		/saveGame					controllers.Application.saveGame(fileName:String)
+GET		/loadGame					controllers.Application.loadGame(fileName:String)
+GET		/changeFieldSize			controllers.Application.changeFieldSize(h:Int,w:Int)
+GET		/availableFiles				controllers.Application.availableFiles
+GET		/possessions				controllers.Application.possessions
+
+# Javascript routing
+GET     /assets/javascripts/routes	controllers.Application.javascriptRoutes
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
