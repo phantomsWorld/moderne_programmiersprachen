@@ -12,7 +12,7 @@ class Field ( player: Int, height: Int, width: Int ) {
   
   def generateRandom = for(i<-0 until height; j<-0 until width){
 	  cells(i)(j) = new Cell(i,j,randomColor)
-	  while(i == height-1 && j == 0 && cells(i)(j).compareColors(cells(0)(width-1)))
+	  while(i == height-1 && j == width-1 && cells(i)(j).compareColors(cells(0)(0)))
 	    cells(i)(j) = new Cell(i,j,randomColor)
   	}
   
