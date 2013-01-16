@@ -13,9 +13,6 @@ import javax.swing.BorderFactory
 import javax.swing.border._
 import javax.swing.JProgressBar
 import javax.swing.SwingConstants
-import scala.actors.Actor
-import scala.actors.remote._
-import scala.actors.remote.RemoteActor._
 
 class AreaFrame(controller:GameController,fileRootDir:String = "games/") extends MainFrame {
   
@@ -83,6 +80,7 @@ class AreaFrame(controller:GameController,fileRootDir:String = "games/") extends
          val button = new Button()
          button.preferredSize = new Dimension(45,45)
          button.background = Util.color(i,true).asInstanceOf[Color]
+         if(i==controller.cells(0)(0).c || i == controller.cells(controller.cells.length-1)(controller.cells(0).length-1).c) button.visible = false
          button.action = Action("") {
            controller.changeColor(i)
            drawField
@@ -101,28 +99,6 @@ class AreaFrame(controller:GameController,fileRootDir:String = "games/") extends
 	  contents += new Label("Computer")
 	  contents += Component.wrap(new Bar(if((2*controller.readPossessions(1)).toInt>100) 100 else (2*controller.readPossessions(1).toInt)))
 	}
-  
-// define player frame
-   def gameFrame = new BoxPanel(Orientation.Vertical){
-     contents += new FlowPanel {
-       for(i<- 0 until controller.colorNum){
-         val button = new Button()
-         button.preferredSize = new Dimension(45,45)
-         button.background = Util.color(i,true).asInstanceOf[Color]
-         button.action = Action("") {
-           controller.changeColor(i)
-           drawField
-         }
-         contents+=button
-       }
-    }
-    
-    contents += new Label("Ihr Fortschritt")
-    contents += Component.wrap(new Bar((2*controller.readPossessions(0)).toInt))
-    
-    contents += new Label("Computer")
-    contents += Component.wrap(new Bar((2*controller.readPossessions(1)).toInt))
-  }
    
    def drawField:Boolean = {
      contents = new BorderPanel{

@@ -46,6 +46,7 @@ object Application extends Controller {
   
   def availableFiles = Action { Ok(controller.availableFiles("public/games","HTML")) }
   def possessions = Action { Ok(controller.readPossessions(0)+";"+controller.readPossessions(1)) }
+  def readInactColors = Action { Ok(controller.inactiveColors) }
   
   def javascriptRoutes = Action { implicit request =>
     import routes.javascript._
@@ -59,6 +60,7 @@ object Application extends Controller {
 	     controllers.routes.javascript.Application.loadGame,
 	     controllers.routes.javascript.Application.changeFieldSize,
 	     controllers.routes.javascript.Application.availableFiles,
-	     controllers.routes.javascript.Application.possessions)).as("text/javascript")
+	     controllers.routes.javascript.Application.possessions,
+	     controllers.routes.javascript.Application.readInactColors)).as("text/javascript")
   }
 }

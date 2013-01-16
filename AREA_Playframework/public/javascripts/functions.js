@@ -6,7 +6,7 @@ $(document).ready(function() {
 		heightStyle:"content"
 	});
 	
-	$( "#button" ).button();
+	$( ".changeColorButton" ).button();
 	
 	// Link to open the dialog
 	$( ".dialog-link" ).click(function( event ) {
@@ -31,10 +31,6 @@ $(document).ready(function() {
 	$(this).ajaxStop(function() {
 		removeAjaxWaiting();
 	});
-	
-	
-	// Transform colors into images
-	//setFieldImages();
 	
 	// initialize recursion-slider
 	updateSlider();
@@ -66,30 +62,6 @@ $(document).ready(function() {
 		});
 	});
 	
-	// Handle field-image events for changing colors
-	/*$(".b a").click(function() {
-		alert("Test");
-		$("#b").trigger('click');
-	});
-	$(".g a").click(function() {
-		$("#g").trigger('click');
-	});
-	$(".r a").click(function() {
-		$("#r").trigger('click');
-	});
-	$(".v a").click(function() {
-		$("#v").trigger('click');
-	});
-	$(".y a").click(function() {
-		$("#y").trigger('click');
-	});
-	$('a.changeColorField').click(function() {
-		alert("changeColor");
-		var eventID = $(this).next().attr('alt');
-		alert("colorID: "+eventID);
-		$('#'+eventID).trigger('click');
-	});*/
-	
 	// Handle events of menu
 	// Start new game
 	$("#new").click( function() {
@@ -112,6 +84,32 @@ $(document).ready(function() {
 	drawField();
 });
 
+// Set buttons inactive if colors possessed by one player
+function setButtonsActive() {
+	alert("Test");
+	$("#b").button("enable");
+	$("#y").button("enable");
+	$("#g").button("enable");
+	$("#v").button("enable");
+	$("#r").button("enable");
+	alert("Before reading inactive colors");
+	
+	jsRoutes.controllers.Application.readInactColors().ajax({
+		success: function(data) {
+			var temp = split(";");
+			alert("Colors: "+temp);
+			$("#" + temp(0)).button("disable");
+			$("#" + temp(1)).button("disable");
+			removeAjaxWaiting();
+			$.unblockUI();
+		},
+		error: function() {
+			alert("Fehler beim Ermitteln der besetzten Farben!");
+			$.unblockUI();
+		}
+	});
+}
+
 // Refresh field in browser
 function drawField() {
 	jsRoutes.controllers.Application.refreshFieldHtml().ajax({
@@ -128,6 +126,8 @@ function drawField() {
 			$.unblockUI();
 		}
 	});
+	
+	setButtonsActive();
 	readBotRecursion();
 	playerPossessions();
 }
@@ -483,7 +483,7 @@ function addResizeForm() {
 
 function addGameResult(resultTitle) {
 	var content = "<form id='form-overlay' class='ui-widget-overlay'><div id='game-result-dialog' title='"+resultTitle+"'><form><fieldset><p><span class='ui-icon ui-icon-info' style='float: left; margin: 0 14px 40px 0;'></span>Sie k&ouml;nnen nun entweder ein neues Spiel starten oder das aktuelle beibehalten.</p></fieldset></form></div></form>";
-	alert(content);
+	//alert(content);
 	$("#formContent").empty().html(content);
 
 	$( "#game-result-dialog" ).dialog({

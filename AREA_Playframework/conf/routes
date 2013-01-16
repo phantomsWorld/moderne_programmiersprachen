@@ -15,6 +15,7 @@ GET		/loadGame					controllers.Application.loadGame(fileName:String)
 GET		/changeFieldSize			controllers.Application.changeFieldSize(h:Int,w:Int)
 GET		/availableFiles				controllers.Application.availableFiles
 GET		/possessions				controllers.Application.possessions
+GET		/readInactColors			controllers.Application.readInactColors
 
 # Javascript routing
 GET     /assets/javascripts/routes	controllers.Application.javascriptRoutes

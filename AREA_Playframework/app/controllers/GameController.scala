@@ -14,15 +14,12 @@ class GameController {
   }
   def refreshField = {
     controller.refreshField
-    //updateUIs
   }
   def changeColor(newColor:String) = {
     controller.changeColor(Util.colorsStringToInt(newColor).asInstanceOf[Int])
-    //updateUIs
   }
   def changeColor(newColor:Int) = {
     controller.changeColor(newColor)
-    //updateUIs
   }
   def readBotRecursion = controller.readRecursion
   def resetBotRecursion(value:Int) = {
@@ -38,6 +35,8 @@ class GameController {
   def w = controller.field.w
   def colorNum = controller.colorNum
   def cells = controller.field.cells
+  
+  def inactiveColors = Util.color(controller.field.cells(0)(0).c)+";"+Util.color(controller.field.cells(controller.field.cells.length-1)(controller.field.cells(0).length-1).c)
   
   /*def updateUIs = {
     games.foreach(actor => {
