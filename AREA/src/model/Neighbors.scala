@@ -24,6 +24,6 @@ class Neighbors{
   override def toString = {
     var result = ""
     list.foreach(cell => result+=cell.toString)
-    result+""
+    result + ""
   }
 }
