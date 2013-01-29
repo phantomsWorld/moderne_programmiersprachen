@@ -46,7 +46,7 @@ object Application extends Controller {
   
   def availableFiles = Action { Ok(controller.availableFiles("public/games","HTML")) }
   def possessions = Action { Ok(controller.readPossessions(0)+";"+controller.readPossessions(1)) }
-  def readInactColors = Action { Ok(controller.inactiveColors) }
+  def readInactColors = Action { Ok("True;False")}//controller.inactiveColors) }
   
   def javascriptRoutes = Action { implicit request =>
     import routes.javascript._
